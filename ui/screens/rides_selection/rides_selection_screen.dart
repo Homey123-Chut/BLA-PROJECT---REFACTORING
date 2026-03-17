@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../../../model/ride/ride.dart';
-import '../../../model/ride_pref/ride_pref.dart';
+import '../../../model/ride.dart';
+import '../../../model/ride_pref.dart';
 import '../../../services/ride_prefs_service.dart';
 import '../../../services/rides_service.dart';
 import '../../../utils/animations_util.dart' show AnimationUtils;

@@ -1,16 +1,17 @@
 import 'package:blabla/model/location/locations.dart';
 import 'package:blabla/model/ride_pref/ride_pref.dart';
-import 'package:blabla/repositories/location/location_repository.dart';
-import 'package:blabla/ui/theme/theme.dart';
-import 'package:blabla/ui/widgets/buttons/bla_button.dart';
-import 'package:blabla/ui/widgets/buttons/bla_icon_button.dart';
-import 'package:blabla/ui/widgets/display/bla_divider.dart';
-import 'package:blabla/ui/widgets/pickers/bla_location_picker.dart';
 import 'package:blabla/ui/widgets/pickers/seat/bla_seat_picker.dart';
-import 'package:blabla/utils/animations_util.dart';
-import 'package:blabla/utils/date_time_utils.dart';
+
+import '../../../ui/widgets/buttons/bla_button.dart';
+import '../../../ui/widgets/display/bla_divider.dart';
 import 'package:flutter/material.dart';
 
+import '../../../repositories/location/location_repository.dart';
+import '../../../utils/animations_util.dart';
+import '../../../utils/date_time_utils.dart';
+import '../../theme/theme.dart';
+import '../buttons/bla_icon_button.dart';
+import 'bla_location_picker.dart';
 
 ///
 /// A  RidePreference Picker is a view to pick a RidePreference:
@@ -21,16 +22,18 @@ import 'package:flutter/material.dart';
 ///
 class BlaRidePreferencePicker extends StatefulWidget {
   final RidePreference? initRidePreference; // optional initial preference.
-  final LocationRepository locationRepository;
 
   const BlaRidePreferencePicker({
     super.key,
     this.initRidePreference,
     required this.locationRepository,
+    required this.maxAllowedSeats,
     required this.onRidePreferenceSelected,
   });
 
   final ValueChanged<RidePreference> onRidePreferenceSelected;
+  final LocationRepository locationRepository;
+  final int maxAllowedSeats;
 
   @override
   State<BlaRidePreferencePicker> createState() =>
@@ -122,7 +125,7 @@ class _BlaRidePreferencePickerState extends State<BlaRidePreferencePicker> {
       AnimationUtils.createRightToLeftRoute(
         BlaSeatPicker(
           initSeats: requestedSeats,
-          maxSeat: 8,
+          maxSeat: widget.maxAllowedSeats,
         ),
       ),
     );

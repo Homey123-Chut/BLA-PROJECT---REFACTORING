@@ -1,7 +1,9 @@
+import 'package:flutter/foundation.dart';
+
 import '../../model/ride_pref/ride_pref.dart';
 import '../../repositories/ride_preference/ride_preference_repository.dart';
 
-class RidePreferencesState {
+class RidePreferencesState extends ChangeNotifier {
   RidePreference? selectedPreference;
   List<RidePreference> preferenceHistory = [];
   int maxAllowedSeats = 8;
@@ -17,6 +19,7 @@ class RidePreferencesState {
       selectedPreference = pref;
       preferenceHistory.add(pref);
       repo.addRidePref(pref);
+      notifyListeners();
     }
   }
 }

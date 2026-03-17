@@ -5,20 +5,6 @@ import 'repositories/location/location_repository.dart';
 import 'repositories/ride/ride_repository.dart';
 import 'ui/states/ride_preferences_state.dart';
 
-class AppDependencies {
-  final LocationRepository locationRepository;
-  final RideRepository rideRepository;
-  final RidePreferencesState rideState;
-
-  const AppDependencies({
-    required this.locationRepository,
-    required this.rideRepository,
-    required this.rideState,
-  });
-
-  static late AppDependencies instance;
-}
-
 class BlaBlaApp extends StatelessWidget {
   final LocationRepository locationRepository;
   final RideRepository rideRepository;
@@ -33,16 +19,13 @@ class BlaBlaApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    AppDependencies.instance = AppDependencies(
-      locationRepository: locationRepository,
-      rideRepository: rideRepository,
-      rideState: rideState,
-    );
-
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: blaTheme,
-      home: const HomeScreen(),
+      home: HomeScreen(
+        locationRepository: locationRepository,
+        rideState: rideState,
+      ),
     );
   }
 }
