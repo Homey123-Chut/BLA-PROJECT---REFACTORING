@@ -1,7 +1,8 @@
 import 'package:blabla/ui/widgets/pickers/bla_ride_preference_picker.dart';
+import 'package:blabla/main_common.dart';
 import 'package:flutter/material.dart';
 
-import '../../../../model/ride_pref/ride_pref.dart';
+import '../../../../model/ride_pref.dart';
 import '../../../theme/theme.dart';
 import '../../../widgets/buttons/bla_icon_button.dart';
 
@@ -55,6 +56,7 @@ class _RidePreferenceModalState extends State<RidePreferenceModal> {
                 padding: const EdgeInsets.all(10),
                 child: BlaRidePreferencePicker(
                   initRidePreference: widget.initialPreference,
+                  locationRepository: AppDependencies.instance.locationRepository,
                   onRidePreferenceSelected: onRidePreferenceSelected,
                 ),
               ),

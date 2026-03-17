@@ -1,5 +1,7 @@
-import 'package:blabla/model/ride_pref/ride_pref.dart';
-import 'package:blabla/services/ride_prefs_service.dart';
+
+import '../../../services/ride_prefs_service.dart';
+import '../../../main_common.dart';
+import '../../../model/ride_pref.dart';
 import 'package:flutter/material.dart';
 import '../../../utils/animations_util.dart';
 import '../../theme/theme.dart';
@@ -67,6 +69,7 @@ class _HomeScreenState extends State<HomeScreen> {
               // 2 - THE FORM
               BlaRidePreferencePicker(
                 initRidePreference: RidePrefsService.selectedPreference,
+                locationRepository: AppDependencies.instance.locationRepository,
                 onRidePreferenceSelected: onRidePrefSelected,
               ),
               SizedBox(height: BlaSpacings.m),
