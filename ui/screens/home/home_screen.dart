@@ -1,15 +1,8 @@
-
-import '../../../services/ride_prefs_service.dart';
-import '../../../main_common.dart';
-import '../../../model/ride_pref.dart';
 import 'package:flutter/material.dart';
-import '../../../utils/animations_util.dart';
-import '../../theme/theme.dart';
-import '../../widgets/pickers/bla_ride_preference_picker.dart';
-import '../rides_selection/rides_selection_screen.dart';
-import 'widgets/home_history_tile.dart';
-
-const String blablaHomeImagePath = 'assets/images/blabla_home.png';
+import '../../../repositories/location/location_repository.dart';
+import '../../states/ride_preferences_state.dart';
+import 'view_model/home_model.dart';
+import 'widgets/home_content.dart';
 
 ///
 /// This screen allows user to:
@@ -17,98 +10,43 @@ const String blablaHomeImagePath = 'assets/images/blabla_home.png';
 /// - Or select a last entered ride preferences and launch a search on it
 ///
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+  final LocationRepository locationRepository;
+  final RidePreferencesState rideState;
+
+  const HomeScreen({
+    super.key,
+    required this.locationRepository,
+    required this.rideState,
+  });
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  void onRidePrefSelected(RidePreference selectedPreference) async {
-    // 1- Ask the service to update the current preference
-    RidePrefsService.selectPreference(selectedPreference);
+  late final HomeViewModel _viewModel;
 
-    // 2 - Navigate to the rides screen
-    await Navigator.of(
-      context,
-    ).push(AnimationUtils.createBottomToTopRoute(RidesSelectionScreen()));
-
-    // 3 - After wait  - Update the state   - TODO Improve this with proper state managagement
-    setState(() {});
+  @override
+  void initState() {
+    super.initState();
+    _viewModel = HomeViewModel(
+      rideState: widget.rideState,
+      locationRepository: widget.locationRepository,
+    );
   }
 
   @override
-  Widget build(context) {
-    return Stack(children: [_buildBackground(), _buildForeground()]);
+  void dispose() {
+    _viewModel.dispose();
+    super.dispose();
   }
 
-  Widget _buildForeground() {
-    return Column(
-      children: [
-        // 1 - THE HEADER
-        SizedBox(height: 16),
-        Align(
-          alignment: AlignmentGeometry.center,
-          child: Text(
-            "Your pick of rides at low price",
-            style: BlaTextStyles.heading.copyWith(color: Colors.white),
-          ),
-        ),
-        SizedBox(height: 100),
-
-        Container(
-          margin: EdgeInsets.symmetric(horizontal: BlaSpacings.xxl),
-          decoration: BoxDecoration(
-            color: Colors.white, // White background
-            borderRadius: BorderRadius.circular(16), // Rounded corners
-          ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              // 2 - THE FORM
-              BlaRidePreferencePicker(
-                initRidePreference: RidePrefsService.selectedPreference,
-                locationRepository: AppDependencies.instance.locationRepository,
-                onRidePreferenceSelected: onRidePrefSelected,
-              ),
-              SizedBox(height: BlaSpacings.m),
-
-              // 3 - THE HISTORY
-              _buildHistory(),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildHistory() {
-    // Reverse the history of preferences
-    List<RidePreference> history = RidePrefsService.preferenceHistory.reversed
-        .toList();
-    return SizedBox(
-      height: 200, // Set a fixed height
-      child: ListView.builder(
-        shrinkWrap: true, // Fix ListView height issue
-        physics: AlwaysScrollableScrollPhysics(),
-        itemCount: history.length,
-        itemBuilder: (ctx, index) => HomeHistoryTile(
-          ridePref: history[index],
-          onPressed: () => onRidePrefSelected(history[index]),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildBackground() {
-    return SizedBox(
-      width: double.infinity,
-      height: 340,
-      child: Image.asset(
-        blablaHomeImagePath,
-        fit: BoxFit.cover, // Adjust image fit to cover the container
-      ),
+  Widget build(BuildContext context) {
+    return AnimatedBuilder(
+      animation: _viewModel,
+      builder: (context, _) {
+        return HomeContent(viewModel: _viewModel);
+      },
     );
   }
 }
