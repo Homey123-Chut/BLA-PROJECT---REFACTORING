@@ -51,4 +51,9 @@ class RidePreferenceRepositoryMock implements RidePreferenceRepository {
     return ridesPref;
 
   }
+
+  @override
+  void addRidePref(RidePreference pref) {
+    return ridesPref.add(pref);
+  }
 }

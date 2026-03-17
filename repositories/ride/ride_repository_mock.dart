@@ -1,8 +1,9 @@
+import 'package:blabla/model/ride_pref.dart';
+
 import '../../model/ride/ride.dart';
-import '../../model/location/location.dart';
+import '../../model/location/locations.dart';
 import '../ride/ride_repository.dart';
 
-import '../location/location_repository.dart';
 import '../location/location_repository_mock.dart';
 
 final List<Location> _locations = LocationRepositoryMock().getLocations();
@@ -106,5 +107,13 @@ class RideRepositoryMock implements RideRepository {
   List<Ride> getRides() {
     return rides;
   }
-
+  
+  @override
+  List<Ride> getRidesFor(RidePreference pref) {
+    return rides.where((ride) {
+      return ride.departureLocation == pref.departure &&
+          ride.arrivalLocation == pref.arrival &&
+          ride.availableSeats >= pref.requestedSeats;
+    }).toList();
+}
 }
