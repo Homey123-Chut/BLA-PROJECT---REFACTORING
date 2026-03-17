@@ -24,6 +24,7 @@ class BlaBlaApp extends StatelessWidget {
       theme: blaTheme,
       home: HomeScreen(
         locationRepository: locationRepository,
+        rideRepository: rideRepository,
         rideState: rideState,
       ),
     );

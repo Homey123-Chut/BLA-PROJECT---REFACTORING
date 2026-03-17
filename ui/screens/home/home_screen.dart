@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../repositories/location/location_repository.dart';
+import '../../../repositories/ride/ride_repository.dart';
 import '../../states/ride_preferences_state.dart';
 import 'view_model/home_model.dart';
 import 'widgets/home_content.dart';
@@ -11,11 +12,13 @@ import 'widgets/home_content.dart';
 ///
 class HomeScreen extends StatefulWidget {
   final LocationRepository locationRepository;
+  final RideRepository rideRepository;
   final RidePreferencesState rideState;
 
   const HomeScreen({
     super.key,
     required this.locationRepository,
+    required this.rideRepository,
     required this.rideState,
   });
 
@@ -32,6 +35,7 @@ class _HomeScreenState extends State<HomeScreen> {
     _viewModel = HomeViewModel(
       rideState: widget.rideState,
       locationRepository: widget.locationRepository,
+      rideRepository: widget.rideRepository,
     );
   }
 

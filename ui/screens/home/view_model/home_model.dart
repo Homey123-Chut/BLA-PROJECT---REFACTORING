@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../../model/ride_pref/ride_pref.dart';
 import '../../../../repositories/location/location_repository.dart';
+import '../../../../repositories/ride/ride_repository.dart';
 import '../../../../utils/animations_util.dart';
 import '../../../states/ride_preferences_state.dart';
 import '../../rides_selection/rides_selection_screen.dart';
@@ -9,10 +10,12 @@ import '../../rides_selection/rides_selection_screen.dart';
 class HomeViewModel extends ChangeNotifier {
   final RidePreferencesState _rideState;
   final LocationRepository locationRepository;
+  final RideRepository rideRepository;
 
   HomeViewModel({
     required RidePreferencesState rideState,
     required this.locationRepository,
+    required this.rideRepository,
   }) : _rideState = rideState {
     _rideState.addListener(_onRideStateChanged);
   }
@@ -30,9 +33,15 @@ class HomeViewModel extends ChangeNotifier {
   ) async {
     _rideState.selectPreference(selectedPreference);
 
-    await Navigator.of(
-      context,
-    ).push(AnimationUtils.createBottomToTopRoute(const RidesSelectionScreen()));
+    await Navigator.of(context).push(
+      AnimationUtils.createBottomToTopRoute(
+        RidesSelectionScreen(
+          rideState: _rideState,
+          rideRepository: rideRepository,
+          locationRepository: locationRepository,
+        ),
+      ),
+    );
   }
 
   void _onRideStateChanged() {
